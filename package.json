@@ -1,0 +1,31 @@
+{
+  "name": "@solvus/client",
+  "version": "0.1.0",
+  "description": "This repository contains the client-facing/stage component of solv.us. For full instructions, please see the [documentation repository](https://github.com/solv-us/documentation).",
+  "main": "dist/solvus-client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --env prod",
+    "serve":"webpack --watch --env dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solv-us/client.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/solv-us/client/issues"
+  },
+  "homepage": "https://github.com/solv-us/client#readme",
+  "devDependencies": {
+    "css-loader": "^3.6.0",
+    "html-loader": "^1.1.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "socket.io-client": "^2.3.0"
+  }
+}

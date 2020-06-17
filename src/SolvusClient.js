@@ -1,8 +1,17 @@
+import './standby.css';
+import Clock from './Clock.js'
+import standbyTemplate from './standby.html';
+import * as io from 'socket.io-client';
+ 
 // Class for front-end Client management
-class Client {
-    constructor(socket, stageId) {
-        this.socket = socket; 
+export default class SolvusClient {
+    constructor(stageId, serverURI) {
 
+        let _serverURI = serverURI || location.protocol + '//'+ window.location.host;
+        this.socket = io(_serverURI + '/client');
+
+        document.body.innerHTML += standbyTemplate;
+        
         this.state = {};
         this.state.isFullScreen = false;
         this.state.media = '';

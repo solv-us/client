@@ -3,7 +3,7 @@
  */
 
  
-function Clock(autoStart) {
+export default function Clock(autoStart) {
 
     this.autoStart = (autoStart !== undefined) ? autoStart : true;
 
