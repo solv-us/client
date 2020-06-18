@@ -1,8 +1,8 @@
 # solv.us client
-This repository contains the client-facing/stage component of solv.us. For more information about this project, please see the [documentation repository](https://github.com/solv-us/documentation).
+This repository contains the client-facing/stage component of solv.us. For more information about this project, please see the [server repository](https://github.com/solv-us/server).
 
 ## How to use
-A standalone build of solv.us-client is exposed automatically by the solv.us server at ```/solvus-client.js```, so you can add it to your project like this:
+A standalone build of the client is exposed automatically by the server at ```/solvus-client.js```, so you can add it to your project like this:
 
 ```
 <script src="./solvus-client.js"></script>
