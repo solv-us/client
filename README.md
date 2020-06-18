@@ -5,7 +5,7 @@ This repository contains the client-facing/stage component of solv.us. For more 
 A standalone build of solv.us-client is exposed automatically by the solv.us server at ```/solvus-client.js```, so you can add it to your project like this:
 
 ```
-<script src="../solvus-client.js"></script>
+<script src="./solvus-client.js"></script>
 <script>
         let client = new SolvusClient();
         
