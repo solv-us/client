@@ -1,32 +1,43 @@
 # solv.us client
-This repository contains the client-facing/stage component of solv.us. For full instructions, please see the [documentation repository](https://github.com/solv-us/documentation).
+This repository contains the client-facing/stage component of solv.us. For more information about this project, please see the [documentation repository](https://github.com/solv-us/documentation).
 
+## How to use
+A standalone build of solv.us-client is exposed automatically by the solv.us server at ```/solvus-client.js```, so you can add it to your project like this:
 
-## Setup for use in projects
-
-### Prerequisites
-Solv.us server runs in a Node.js environment, so make sure [Node.js](https://nodejs.org/en/) is installed on the computer you intend to run this server on. 
-
-Download the latest version from the Releases tab, and include it in your project like this:
 ```
-<script src="../dist/solvus-client.js"></script>
+<script src="../solvus-client.js"></script>
+<script>
+        let client = new SolvusClient();
+        
+        client.on('stageEvent', (event)=>{
+           // React to stage events here
+        });
+        
+        client.on('beat', (time)=>{
+            // Do something here every beat
+        });
+</script>
+        
 ```
 
-or, if you use NPM, like this:
+or, if you prefer to use npm, add it to your project the following way:
+
 ```
-import * as webpackNumbers from 'webpack-numbers';
+npm install @solvus/client
+```
+```
+// This requires support for ES6 import syntax
+import SolvusClient from '@solvus/client'
+let client = new SolvusClient();
 ```
 
-### Note on HTTPS
-Solv.us server is by default only accessible over HTTPS. To make things easier, it will generate the necessary certificate and key on start up and save them in the root folder. Browsers will not trust this certificate since it's self-signed, so in each browser you will need to trust it manually.
+The set-up takes two optional arguments: ```stageId``` and ```serverURI```. When not supplied, these values can be set with URL parameters:
+```/?stageId=SecondStage&serverURI=https://localhost:8469```
 
-If you wish to provide your own certificate and key to prevent this, save them as ```./local-cert.pem``` and ```./local-key.pem``` in your root folder.
-
-
+If these values are also not provided in the URL, ```stageId``` defaults to ```main```, and ```serverURI``` defaults to the  [host](https://developer.mozilla.org/en-US/docs/Web/API/Location/host) of the page.
 
 
-
-## Setup for development of the plugin
+## Setup for development
 If you want to add features or customize the client, you'll need to clone the whole repository and install its dependencies:
 
 ```
