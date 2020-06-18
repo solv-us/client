@@ -4,7 +4,7 @@ This repository contains the client-facing/stage component of solv.us. For more 
 ## How to use
 A standalone build of the client is exposed automatically by the server at ```/solvus-client.js```, so you can add it to your project like this:
 
-```
+```html
 <script src="./solvus-client.js"></script>
 <script>
         let client = new SolvusClient();
@@ -25,7 +25,7 @@ or, if you prefer to use npm, add it to your project the following way:
 ```
 npm install @solvus/client
 ```
-```
+```js
 // This requires support for ES6 import syntax
 import SolvusClient from '@solvus/client'
 let client = new SolvusClient();
