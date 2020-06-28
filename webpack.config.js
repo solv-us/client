@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'solv.us-stage',
+    filename: 'solvus-client.js',
     library: 'SolvusClient',
     libraryTarget: 'umd',
   },

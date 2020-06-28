@@ -1,3 +1,10 @@
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+}
+
 .solvus-standby {
   font-family:'FiraCode-Retina','Fira Code', monospace;
   z-index: 99!important;
@@ -6,9 +13,10 @@
   position: absolute;
   top:0;
   left:0;
+  overflow: hidden;
   background: linear-gradient(to right, #002fc6 0%, #002bb2 14.2857142857%, #3a3a3a 14.2857142857%, #303030 28.5714285714%, #ff0afe 28.5714285714%, #f500f4 42.8571428571%, #6c6c6c 42.8571428571%, #626262 57.1428571429%, #0affd9 57.1428571429%, #00f5ce 71.4285714286%, #3a3a3a 71.4285714286%, #303030 85.7142857143%, white 85.7142857143%, #fafafa 100%);
 }
-.solvus-standby *{
+.solvus-standby, .solvus-standby *{
   box-sizing: border-box;
 }
 .solvus-standby:before, .solvus-standby:after {
@@ -40,28 +48,32 @@
   color:#fff;
   padding: 20px;
   margin:20px;
-  border: 5px dashed #fff;
+  border: 5px dashed red;
+  outline: 5px solid #fff;
   font-size: 2rem;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  text-align: center;
+}
+
+.solvus-standby .display.connected{
+  border-color:#0fde00;
 }
 .solvus-standby .display.ready{
   background: green;
 }
-.solvus-standby .display.warning{
-  background: yellow;
-}
-.solvus-standby .display.problem{
-  background: red;
-}
 
 .solvus-standby .display h1,h2,h3,h4{
-  margin:0;
+  margin:0.3em;
   font-weight: 500;
+}
+.solvus-standby .display h1{
+  margin-top:0;
 }
 .solvus-standby .display h3{
   font-weight: normal;
   font-size: 0.4em;
+  margin:0;
 }
 .solvus-standby .display h2{
   font-size: 0.7em;

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solv.us Stage</title>
+</head>
+
+<body>
+
+    <div class="content">
+        This is the stage content! Quite empty.
+    </div>
+
+    <script src="../dist/solvus-client.js"></script>
+
+    <script>
+
+        let client = new SolvusClient();
+        
+        client.on('stageEvent', (event) => {
+            console.log(event)
+        });
+
+        client.on('beat', (time) => {
+            console.log(time);
+        });
+
+    </script>
+</body>
+</html>

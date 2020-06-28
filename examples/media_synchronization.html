@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solv.us Stage</title>
+</head>
+
+<body>
+    <!-- This example shows how to use solvus to synchronize media playback across stages/clients -->
+
+    <div class="content">
+        <video class="screen" id="screen" loop playsinline preload="auto">
+            <source id="source" src="" type="video/mp4" />
+        </video>
+    </div>
+
+    <script src="../dist/solvus-client.js"></script>
+
+    <script>
+
+        let client = new SolvusClient();
+
+        client.on('stageEvent', (event) => {
+            switch (event.id) {
+                case 'setMedia':
+                    setMedia(event.value);
+                    break;
+                case 'start':
+                    start();
+                    break;
+            }
+        })
+
+        let currentFile = null;
+        let videoElement = document.querySelector('#screen');
+
+        // Set a file for playback
+        // and reset video player
+        setMedia(fileName) {
+            if (fileName === currentFile) return;
+
+            currentFile = fileName;
+            client.state.ready = false;
+            client.setStandbyVisibility(false);
+
+            videoElement.pause();
+            videoElement.currentTime = 0;
+
+            this.loadContent(fileName);
+        }
+
+        // Download the specified file
+        loadContent(fileName) {
+            let req = new XMLHttpRequest();
+            req.open('GET', '/content/' + fileName + '?_=' + new Date().getTime(), true);
+            req.setRequestHeader('Cache-Control', 'no-cache');
+            req.responseType = 'blob';
+
+            req.onload = (event) => {
+                if (event.srcElement.status === 200) {
+                    var videoBlob = event.srcElement.response;
+                    var vid = URL.createObjectURL(videoBlob);
+                    videoElement.src = vid;
+
+                    client.state.ready = true;
+                }
+            };
+
+            req.send();
+        }
+
+        // Start video
+        start(timestamp) {
+            videoElement.start();
+            videoElement.currentTime = 0;
+            client.setStandbyVisibility(false);
+        }
+    </script>
+</body>
+
+</html>

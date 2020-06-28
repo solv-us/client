@@ -1,12 +1,12 @@
 {
   "name": "@solvus/client",
-  "version": "0.1.0",
-  "description": "This repository contains the client-facing/stage component of solv.us. For full instructions, please see the [documentation repository](https://github.com/solv-us/documentation).",
+  "version": "0.1.1",
+  "description": "This repository contains the client-facing/stage component of solv.us.",
   "main": "dist/solvus-client.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --env prod",
-    "serve":"webpack --watch --env dev"
+    "serve":"webpack --watch --mode development"
   },
   "repository": {
     "type": "git",
