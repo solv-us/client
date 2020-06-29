@@ -4,6 +4,7 @@ import standbyTemplate from './standbyTemplate/index.html';
 
 import * as io from 'socket.io-client';
 import EventEmitter from './EventEmitter.js'
+import screenfull from "screenfull"
 
 export default class SolvusClient extends EventEmitter {
     constructor(_stageId, _serverURI, standby = true) {
@@ -117,7 +118,7 @@ export default class SolvusClient extends EventEmitter {
         document.querySelector('.stageId').innerHTML = stageId;
 
         this.socket.emit('clientUpdate', this.state);
-        console.log('subscribe')
+        
     }
 
     /**
@@ -136,15 +137,11 @@ export default class SolvusClient extends EventEmitter {
      * Toggle between FullScreen mode for the body element
      */
     toggleFullscreen() {
-        let elem = document.querySelector("body");
+        let element = document.querySelector("body");
 
-        if (!document.fullscreenElement) {
-            elem.requestFullscreen().catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            document.exitFullscreen();
-        }
+        if (screenfull.isEnabled) {
+            screenfull.toggle(element);
+        }       
     }
 
     /**
