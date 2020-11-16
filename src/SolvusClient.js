@@ -7,37 +7,46 @@ import EventEmitter from './EventEmitter.js'
 import screenfull from "screenfull"
 
 export default class SolvusClient extends EventEmitter {
-    constructor(_stageId, _serverURI, standby = true) {
+    constructor(_settings = {}) {
         super();
-        //To-Do: use object for settings 
-        //   this.settings = Object.assign({}, Defaults, settings);
-        
-        // If no stage ID is passed, look for ?stageId=x in url, otherwise default to main.
-        let urlConfig = new URLSearchParams(document.location.search.substring(1));
-        this.stageId = _stageId || urlConfig.get("stageId") || 'main';
 
-        // If no Server URI is passed, look for ?serverURI=x in url, otherwise default
-        let serverURI =  _serverURI || urlConfig.get('serverURI') || 'https://localhost:8843';
+        // Look for configuration parameters in the url
+        let urlConfig = new URLSearchParams(document.location.search.substring(1));
+
+        let defaults = {
+          stageId: urlConfig.get("stageId") || 'main',
+          serverURI: urlConfig.get('serverURI') || 'https://'+location.hostname+':8843',
+          injectStandbyScreen:true,
+          standbyVisible:true,
+          bodyClickTogglesFullScreen:true
+        };
+
+        this.settings = Object.assign({}, defaults, _settings);
         
-        this.socket = io(serverURI + '/client', {path:'/sockets/'});
+        this.socket = io(this.settings.serverURI + '/client', {path:'/sockets/'});
 
         // Inject standby screen into body
-        let template = document.createRange().createContextualFragment(standbyTemplate);
-        document.body.appendChild(template);
+        if(this.settings.injectStandbyScreen){
+            let template = document.createRange().createContextualFragment(standbyTemplate);
+            document.body.appendChild(template);
+        }
         
         // The state object that is shared with the server
         this.state = {
             isFullScreen:false,
-            standbyVisible:true,
+            standbyVisible:this.settings.standbyVisible,
             width:0,
             height:0,
             stageId:undefined
         };
+        
+        if(this.settings.stageId){
+            this.subscribeToStage(this.settings.stageId);
+        }
 
-        this.subscribeToStage(this.stageId);
         this.onSizeChange();
         this.registerEventListeners();
-        this.setStandbyVisibility(standby);
+        this.setStandbyVisibility(this.settings.standbyVisible);
     }
 
     /**
@@ -46,7 +55,10 @@ export default class SolvusClient extends EventEmitter {
     registerEventListeners(){
         window.onresize = () => { this.onSizeChange() };
         document.onfullscreenchange = () =>{ this.onFullScreenChange() };
-        document.querySelector("body").onclick = () => { this.toggleFullscreen() };
+
+        if(this.settings.bodyClickTogglesFullScreen){
+            document.querySelector("body").onclick = () => { this.toggleFullscreen() };
+        }
 
         this.socket.on('connect', ()=>{this.handleConnection()});
         this.socket.on('disconnect', (e)=>{this.handleDisconnection()});
@@ -76,22 +88,29 @@ export default class SolvusClient extends EventEmitter {
      * Sets or toggles the visibility of the standby screen
      */
     setStandbyVisibility(state = !this.state.standbyVisible){
-        this.state.standbyVisible = state;
+        let standbyElement = document.querySelector('.solvus-standby');
 
-        if(state){
-            document.querySelector('.solvus-standby').classList.remove('hidden');
-        }else{
-            document.querySelector('.solvus-standby').classList.add('hidden');
+        if(standbyElement){
+
+            this.state.standbyVisible = state;
+
+            if(state){
+                standbyElement.classList.remove('hidden');
+            }else{
+                standbyElement.classList.add('hidden');
+            }
+
+            this.socket.emit('clientUpdate', this.state);
         }
-
-        this.socket.emit('clientUpdate', this.state);
     }
 
     /**
      * Called on socket connection
      */
     handleConnection(){
-        document.querySelector(".solvus-standby  .display").classList.add('connected');
+        if(this.settings.injectStandbyScreen){
+            document.querySelector(".solvus-standby  .display").classList.add('connected');
+        }
         this.socket.emit('clientUpdate', this.state);
     }
 
@@ -99,7 +118,9 @@ export default class SolvusClient extends EventEmitter {
      * Called on socket disconnection
      */
     handleDisconnection(){
-        document.querySelector('.solvus-standby  .display').classList.remove('connected');
+        if(this.settings.injectStandbyScreen){
+            document.querySelector('.solvus-standby  .display').classList.remove('connected');
+        }
     }
 
     /**
@@ -115,7 +136,10 @@ export default class SolvusClient extends EventEmitter {
      */
     subscribeToStage(stageId){
         this.state.stageId = stageId;
-        document.querySelector('.stageId').innerHTML = stageId;
+
+        if(this.settings.injectStandbyScreen){
+            document.querySelector('.stageId').innerHTML = stageId;
+        }
 
         this.socket.emit('clientUpdate', this.state);
         
@@ -128,8 +152,11 @@ export default class SolvusClient extends EventEmitter {
         
         this.state.width = document.body.clientWidth;
         this.state.height = document.body.clientHeight;
-        document.querySelector(".screenSize").innerHTML = this.state.width + 'x' + this.state.height;
-        
+
+        if(this.settings.injectStandbyScreen){
+            document.querySelector(".screenSize").innerHTML = this.state.width + 'x' + this.state.height;
+        }
+
         this.socket.emit('clientUpdate', this.state);
     }
 

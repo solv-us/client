@@ -1,6 +1,6 @@
 {
   "name": "@solvus/client",
-  "version": "0.1.3",
+  "version": "0.1.1",
   "description": "This repository contains the client-facing/stage component of solv.us.",
   "main": "dist/solvus-client.js",
   "scripts": {

@@ -31,11 +31,18 @@ import SolvusClient from '@solvus/client'
 let client = new SolvusClient();
 ```
 
-The set-up takes two optional arguments: ```stageId``` and ```serverURI```. When not supplied, these values can be set with URL parameters:
+Settings
+```js
+    let client = new SolvusClient({
+        stageId: 'main',
+        serverURI: 'https://localhost:8843',
+        injectStandbyScreen:true,
+        standbyVisible:true,
+        bodyClickTogglesFullScreen:true
+    };
+```
+When not hardcoded, the stageId and serverURI values can be set with URL parameters:
 ```/?stageId=SecondStage&serverURI=https://localhost:8469```
-
-If these values are also not provided in the URL, ```stageId``` defaults to ```main```, and ```serverURI``` defaults to the  [host](https://developer.mozilla.org/en-US/docs/Web/API/Location/host) of the page.
-
 
 ## Setup for development
 If you want to add features or customize the client, you'll need to clone the whole repository and install its dependencies:
